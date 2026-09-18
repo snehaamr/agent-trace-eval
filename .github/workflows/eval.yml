@@ -1,0 +1,25 @@
+name: eval-gate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: pip install -e ".[dev]"
+      - name: Unit tests + eval gate
+        env:
+          AGENT_LLM: heuristic
+        run: pytest
+      - name: Write score table
+        if: always()
+        env:
+          AGENT_LLM: heuristic
+        run: python -m agent_trace_eval --format markdown >> "$GITHUB_STEP_SUMMARY"

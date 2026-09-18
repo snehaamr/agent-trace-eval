@@ -1,0 +1,10 @@
+# Absolute floors for pytest / `python -m agent_trace_eval --gate`.
+# Baseline regression uses eval/baseline.json (checked in from a green run).
+min_success_rate: 0.85
+max_usd_per_task: 0.01
+min_schema_validity: 1.0
+min_tool_recall: 0.90
+min_groundedness: 0.90
+max_p95_latency_ms: 2000
+max_success_drop: 0.02
+max_cost_ratio: 1.25

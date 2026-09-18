@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>agent-trace-eval · trace 6f8a7ffc59951854</title>
+<style>
+  :root { font-family: ui-sans-serif, system-ui, sans-serif; }
+  body { margin: 0; background: #1a1c2a; color: #e8e8f0; }
+  header { padding: 16px 24px; background: #12141f; border-bottom: 1px solid #2c3150; }
+  h1 { font-size: 18px; margin: 0 0 6px; font-weight: 600; }
+  .sub { color: #9aa0c3; font-size: 12px; }
+  .legend { display: flex; gap: 12px; padding: 12px 24px; font-size: 12px; color: #c5c9e8; }
+  .swatch { width: 10px; height: 10px; display: inline-block; border-radius: 2px; margin-right: 4px; }
+  .row { display: grid; grid-template-columns: 260px 1fr 80px; gap: 8px; padding: 6px 24px;
+          border-bottom: 1px solid #23263a; align-items: start; }
+  .label { font-size: 12px; color: #d0d4f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track { position: relative; height: 18px; background: #12141f; border-radius: 3px; margin-top: 2px; }
+  .bar { position: absolute; top: 2px; height: 14px; border-radius: 3px; min-width: 4px; }
+  .dur { font-size: 11px; color: #8b90b3; text-align: right; }
+  .attrs { display: none; grid-column: 1 / -1; background: #12141f; color: #b9c0e8; font-size: 11px;
+            padding: 8px; border-radius: 4px; overflow: auto; }
+  .row:hover .attrs { display: block; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Jaeger-style waterfall · FastPay exception triage</h1>
+  <div class="sub">trace_id=6f8a7ffc59951854a60c21e4117ca699 · 18 spans · hover a row for gen_ai.* attributes</div>
+</header>
+<div class="legend">
+  <span><i class="swatch" style="background:#b45aff"></i>invoke_agent</span>
+  <span><i class="swatch" style="background:#39c5cf"></i>chat</span>
+  <span><i class="swatch" style="background:#d6a840"></i>execute_tool</span>
+  <span><i class="swatch" style="background:#5cc45c"></i>retrieval</span>
+  <span><i class="swatch" style="background:#e5534b"></i>apply_guardrail</span>
+  <span><i class="swatch" style="background:#3d6df2"></i>invoke_workflow</span>
+</div>
+<div class="row">
+  <div class="label" title="eval.task settlement-mismatch-page">eval.task settlement-mismatch-page</div>
+  <div class="track">
+    <div class="bar" style="left:0.00%;width:100.00%;background:#3d6df2"
+         title="eval.task settlement-mismatch-page 2.50ms"></div>
+  </div>
+  <div class="dur">2.50ms</div>
+  <pre class="attrs">{
+  "gen_ai.conversation.id": "settlement-mismatch-page",
+  "gen_ai.evaluation.explanation": "ok",
+  "gen_ai.evaluation.name": "task_success",
+  "gen_ai.evaluation.score.label": "pass",
+  "gen_ai.evaluation.score.value": 1.0,
+  "gen_ai.operation.name": "invoke_workflow",
+  "gen_ai.provider.name": "heuristic",
+  "gen_ai.workflow.name": "settlement-mismatch-page"
+}</pre>
+</div>
+<div class="row">
+  <div class="label" title="invoke_agent fastpay-exception-triage">invoke_agent fastpay-exception-triage</div>
+  <div class="track">
+    <div class="bar" style="left:1.69%;width:90.38%;background:#b45aff"
+         title="invoke_agent fastpay-exception-triage 2.26ms"></div>
+  </div>
+  <div class="dur">2.26ms</div>
+  <pre class="attrs">{
+  "gen_ai.agent.description": "FastPay payments exception triage",
+  "gen_ai.agent.name": "fastpay-exception-triage",
+  "gen_ai.agent.version": "0.1.0",
+  "gen_ai.conversation.id": "settlement-mismatch-page",
+  "gen_ai.operation.name": "invoke_agent",
+  "gen_ai.output.messages": "[{\"role\": \"assistant\", \"parts\": [{\"type\": \"text\", \"content\": \"{\\\"decision\\\": \\\"page\\\", \\\"summary\\\": \\\"Paged payments-oncall sev-1 for pay_1007 mch_nova\\\", \\\"payment_id\\\": \\\"pay_1007\\\", \\\"facts\\\": [\\\"pay_1007\\\", \\\"1250000\\\", \\\"failed\\\", \\\"SETTLEMENT_MISMATCH\\\", \\\"mch_nova\\\", \\\"cus_ops\\\", \\\"sev-1\\\"], \\\"refund_amount_cents\\\": null, \\\"incident_id\\\": \\\"inc_9002\\\"}\"}]}]",
+  "gen_ai.provider.name": "heuristic",
+  "gen_ai.request.model": "heuristic",
+  "gen_ai.system_instructions": "[{\"type\": \"text\", \"content\": \"You are FastPay's payments exception triage agent.\\nUse tools to inspect the ledger and playbooks before you mutate anything.\\nNever invent payment amounts, statuses, or failure codes.\\nWhen finished, return ONLY JSON:\\n{\\\"decision\\\":\\\"retry_later|refund|hold|page|no_action|escalate|refuse\\\",\\n \\\"summa</pre>
+</div>
+<div class="row">
+  <div class="label" title="apply_guardrail input_policy">apply_guardrail input_policy</div>
+  <div class="track">
+    <div class="bar" style="left:3.63%;width:0.80%;background:#e5534b"
+         title="apply_guardrail input_policy 0.00ms"></div>
+  </div>
+  <div class="dur">0.00ms</div>
+  <pre class="attrs">{
+  "gen_ai.operation.name": "apply_guardrail",
+  "gen_ai.provider.name": "agent_trace_eval",
+  "guardrail.decision": "allow",
+  "guardrail.name": "input_policy",
+  "guardrail.reason": "ok",
+  "guardrail.rule": "input_ok"
+}</pre>
+</div>
+<div class="row">
+  <div class="label" title="chat heuristic">chat heuristic</div>
+  <div class="track">
+    <div class="bar" style="left:6.51%;width:2.41%;background:#39c5cf"
+         title="chat heuristic 0.06ms"></div>
+  </div>
+  <div class="dur">0.06ms</div>
+  <pre class="attrs">{
+  "gen_ai.conversation.id": "settlement-mismatch-page",
+  "gen_ai.input.messages": "[{\"role\": \"user\", \"parts\": [{\"type\": \"text\", \"content\": \"pay_1007 failed settlement. Inspect the ledger and page if the playbook says so.\"}]}]",
+  "gen_ai.operation.name": "chat",
+  "gen_ai.output.messages": "[{\"role\": \"assistant\", \"parts\": [{\"type\": \"tool_call\", \"id\": \"call_e58b3ebab8\", \"name\": \"lookup_payment\", \"arguments\": {\"payment_id\": \"pay_1007\"}}], \"finish_reason\": \"tool_calls\"}]",
+  "gen_ai.provider.name": "heuristic",
+  "gen_ai.request.model": "heuristic",
+  "gen_ai.request.temperature": 0.0,
+  "gen_ai.response.finish_reasons": [
+    "tool_calls"
+  ],
+  "gen_ai.response.id": "heur_dc212b0868bc",
+  "gen_ai.response.model": "heuristic",
+  "gen_ai.usage.input_tokens": 137,
+  "gen_ai.usage.output_tokens": 27
+}</pre>
+</div>
+<div class="row">
+  <div class="label" title="apply_guardrail tool_policy">apply_guardrail tool_policy</div>
+  <div class="track">
+    <div class="bar" style="left:12.73%;width:0.80%;background:#e5534b"
+         title="apply_guardrail tool_policy 0.00ms"></div>
+  </div>
+  <div class="dur">0.00ms</div>
+  <pre class="attrs">{
+  "gen_ai.operation.name": "apply_guardrail",
+  "gen_ai.provider.name": "agent_trace_eval",
+  "gen_ai.tool.name": "lookup_payment",
+  "guardrail.decision": "allow",
+  "guardrail.name": "tool_policy",
+  "guardrail.reason": "ok",
+  "guardrail.rule": "tool_ok"
+}</pre>
+</div>
+<div class="row">
+  <div class="label" title="execute_tool lookup_payment">execute_tool lookup_payment</div>
+  <div class="track">
+    <div class="bar" style="left:15.72%;width:1.31%;background:#d6a840"
+         title="execute_tool lookup_payment 0.03ms"></div>
+  </div>
+  <div class="dur">0.03ms</div>
+  <pre class="attrs">{
+  "gen_ai.operation.name": "execute_tool",
+  "gen_ai.provider.name": "agent_trace_eval",
+  "gen_ai.tool.call.arguments": "{\"payment_id\": \"pay_1007\"}",
+  "gen_ai.tool.call.id": "call_e58b3ebab8",
+  "gen_ai.tool.call.result": "{\"payment_id\": \"pay_1007\", \"merchant_id\": \"mch_nova\", \"customer_id\": \"cus_ops\", \"amount_cents\": 1250000, \"currency\": \"USD\", \"status\": \"failed\", \"method\": \"ach\", \"failure_code\": \"SETTLEMENT_MISMATCH\", \"fingerprint\": \"fp_cus_ops_1250000\", \"created_at\": \"2026-09-17T14:00:00Z\", \"refunded_cents\": 0, \"ach_return\": null, \"card_last4\": \"4242\"}",
+  "gen_ai.tool.name": "lookup_payment",
+  "gen_ai.tool.type": "function"
+}</pre>
+</div>
+<div class="row">
+  <div class="label" title="chat heuristic">chat heuristic</div>
+  <div class="track">
+    <div class="bar" style="left:20.30%;width:4.31%;background:#39c5cf"
+         title="chat heuristic 0.11ms"></div>
+  </div>
+  <div class="dur">0.11ms</div>
+  <pre class="attrs">{
+  "gen_ai.conversation.id": "settlement-mismatch-page",
+  "gen_ai.input.messages": "[{\"role\": \"user\", \"parts\": [{\"type\": \"text\", \"content\": \"pay_1007 failed settlement. Inspect the ledger and page if the playbook says so.\"}]}, {\"role\": \"assistant\", \"parts\": [{\"type\": \"tool_call\", \"id\": \"call_e58b3ebab8\", \"name\": \"lookup_payment\"}]}, {\"role\": \"tool\", \"parts\": [{\"type\": \"text\", \"content\": \"{\\\"payment_id\\\": \\\"pay_1007\\\", \\\"merchant_id\\\": \\\"mch_nova\\\", \\\"customer_id\\\": \\\"cus_ops\\\", \\\"amount_cents\\\": 1250000, \\\"currency\\\": \\\"USD\\\", \\\"status\\\": \\\"failed\\\", \\\"method\\\": \\\"ach\\\", \\\"failure_code\\\": \\\"SETTLEMENT_MISMATCH\\\", \\\"fingerprint\\\": \\\"fp_cus_ops_1250000\\\", \\\"created_at\\\": \\\"2026-09-17T14:00:00Z\\\", \\\"refunded_cents\\\": 0, \\\"ach_return\\\": null, \\\"card_last4\\\": \\\"4242\\\"}\"}, {\"type\": \"tool_call_response\", \"id\": \"call_e58b3ebab8\", \"result\": \"{\\\"payment_id\\\": \\\"pay_1007\\\", \\\"merchant_id\\\": \\\"mch_nova\\\", \\\"customer_id\\\": \\\"cus_ops\\\", \\\"amount_cents\\\": 1250000, \\\"currency\\\": \\\"USD\\\", \\\"status\\\": \\\"failed</pre>
+</div>
+<div class="row">
+  <div class="label" title="apply_guardrail tool_policy">apply_guardrail tool_policy</div>
+  <div class="track">
+    <div class="bar" style="left:29.86%;width:0.80%;background:#e5534b"
+         title="apply_guardrail tool_policy 0.01ms"></div>
+  </div>
+  <div class="dur">0.01ms</div>
+  <pre class="attrs">{
+  "gen_ai.operation.name": "apply_guardrail",
+  "gen_ai.provider.name": "agent_trace_eval",
+  "gen_ai.tool.name": "retrieve_policy",
+  "guardrail.decision": "allow",
+  "guardrail.name": "tool_policy",
+  "guardrail.reason": "ok",
+  "guardrail.rule": "tool_ok"
+}</pre>
+</div>
+<div class="row">
+  <div class="label" title="execute_tool retrieve_policy">execute_tool retrieve_policy</div>
+  <div class="track">
+    <div class="bar" style="left:33.23%;width:9.72%;background:#d6a840"
+         title="execute_tool retrieve_policy 0.24ms"></div>
+  </div>
+  <div class="dur">0.24ms</div>
+  <pre class="attrs">{
+  "gen_ai.operation.name": "execute_tool",
+  "gen_ai.provider.name": "agent_trace_eval",
+  "gen_ai.tool.call.arguments": "{\"query\": \"SETTLEMENT_MISMATCH failed\"}",
+  "gen_ai.tool.call.id": "call_0fea8e294f",
+  "gen_ai.tool.call.result": "{\"query\": \"SETTLEMENT_MISMATCH failed\", \"documents\": [{\"id\": \"pb_settlement\", \"title\": \"Settlement mismatch\", \"score\": 7.0, \"text\": \"A settlement mismatch is a money-movement incident. Inspect ledger entries, then page payments-oncall at sev-1. Do not refund from this agent.\\nACTION: page_sev-1\\n\"}, {\"id\": \"pb_refund_limits\", \"title\": \"Refund limits\", \"score\": 1.0, \"text\": \"Never refund more than remaining captured amount (amount_cents - refunded_cents). Refunds above 50000 cents ($500) require a manager \\u2014 this agent must refuse. Failed/pending/held payments cannot be refunded.\\nACTION: refund_if_within_limits\\n\"}]}",
+  "gen_ai.tool.name": "retrieve_policy",
+  "gen_ai.tool.type": "function"
+}</pre>
+</div>
+<div class="row">
+  <div class="label" title="retrieval fastpay-playbooks">retrieval fastpay-playbooks</div>
+  <div class="track">
+    <div class="bar" style="left:35.46%;width:5.25%;background:#5cc45c"
+         title="retrieval fastpay-playbooks 0.13ms"></div>
+  </div>
+  <div class="dur">0.13ms</div>
+  <pre class="attrs">{
+  "gen_ai.data_source.id": "fastpay-playbooks",
+  "gen_ai.operation.name": "retrieval",
+  "gen_ai.provider.name": "agent_trace_eval",
+  "gen_ai.retrieval.documents": "[{\"id\": \"pb_settlement\", \"score\": 7.0}, {\"id\": \"pb_refund_limits\", \"score\": 1.0}]",
+  "gen_ai.retrieval.query.text": "SETTLEMENT_MISMATCH failed",
+  "gen_ai.retrieval.top_k": 3
+}</pre>
+</div>
+<div class="row">
+  <div class="label" title="chat heuristic">chat heuristic</div>
+  <div class="track">
+    <div class="bar" style="left:46.11%;width:4.69%;background:#39c5cf"
+         title="chat heuristic 0.12ms"></div>
+  </div>
+  <div class="dur">0.12ms</div>
+  <pre class="attrs">{
+  "gen_ai.conversation.id": "settlement-mismatch-page",
+  "gen_ai.input.messages": "[{\"role\": \"user\", \"parts\": [{\"type\": \"text\", \"content\": \"pay_1007 failed settlement. Inspect the ledger and page if the playbook says so.\"}]}, {\"role\": \"assistant\", \"parts\": [{\"type\": \"tool_call\", \"id\": \"call_e58b3ebab8\", \"name\": \"lookup_payment\"}]}, {\"role\": \"tool\", \"parts\": [{\"type\": \"text\", \"content\": \"{\\\"payment_id\\\": \\\"pay_1007\\\", \\\"merchant_id\\\": \\\"mch_nova\\\", \\\"customer_id\\\": \\\"cus_ops\\\", \\\"amount_cents\\\": 1250000, \\\"currency\\\": \\\"USD\\\", \\\"status\\\": \\\"failed\\\", \\\"method\\\": \\\"ach\\\", \\\"failure_code\\\": \\\"SETTLEMENT_MISMATCH\\\", \\\"fingerprint\\\": \\\"fp_cus_ops_1250000\\\", \\\"created_at\\\": \\\"2026-09-17T14:00:00Z\\\", \\\"refunded_cents\\\": 0, \\\"ach_return\\\": null, \\\"card_last4\\\": \\\"4242\\\"}\"}, {\"type\": \"tool_call_response\", \"id\": \"call_e58b3ebab8\", \"result\": \"{\\\"payment_id\\\": \\\"pay_1007\\\", \\\"merchant_id\\\": \\\"mch_nova\\\", \\\"customer_id\\\": \\\"cus_ops\\\", \\\"amount_cents\\\": 1250000, \\\"currency\\\": \\\"USD\\\", \\\"status\\\": \\\"failed</pre>
+</div>
+<div class="row">
+  <div class="label" title="apply_guardrail tool_policy">apply_guardrail tool_policy</div>
+  <div class="track">
+    <div class="bar" style="left:55.88%;width:0.80%;background:#e5534b"
+         title="apply_guardrail tool_policy 0.00ms"></div>
+  </div>
+  <div class="dur">0.00ms</div>
+  <pre class="attrs">{
+  "gen_ai.operation.name": "apply_guardrail",
+  "gen_ai.provider.name": "agent_trace_eval",
+  "gen_ai.tool.name": "get_ledger_entries",
+  "guardrail.decision": "allow",
+  "guardrail.name": "tool_policy",
+  "guardrail.reason": "ok",
+  "guardrail.rule": "tool_ok"
+}</pre>
+</div>
+<div class="row">
+  <div class="label" title="execute_tool get_ledger_entries">execute_tool get_ledger_entries</div>
+  <div class="track">
+    <div class="bar" style="left:58.87%;width:1.17%;background:#d6a840"
+         title="execute_tool get_ledger_entries 0.03ms"></div>
+  </div>
+  <div class="dur">0.03ms</div>
+  <pre class="attrs">{
+  "gen_ai.operation.name": "execute_tool",
+  "gen_ai.provider.name": "agent_trace_eval",
+  "gen_ai.tool.call.arguments": "{\"payment_id\": \"pay_1007\"}",
+  "gen_ai.tool.call.id": "call_fa0ce03b22",
+  "gen_ai.tool.call.result": "{\"payment_id\": \"pay_1007\", \"entries\": [{\"entry_id\": \"le_pay_1007_auth\", \"payment_id\": \"pay_1007\", \"type\": \"authorization\", \"amount_cents\": 1250000, \"at\": \"2026-09-17T14:00:00Z\"}, {\"entry_id\": \"le_pay_1007_mismatch\", \"payment_id\": \"pay_1007\", \"type\": \"settlement_mismatch\", \"amount_cents\": 1250000, \"expected_cents\": 1250000, \"posted_cents\": 1249999, \"at\": \"2026-09-17T14:00:00Z\"}]}",
+  "gen_ai.tool.name": "get_ledger_entries",
+  "gen_ai.tool.type": "function"
+}</pre>
+</div>
+<div class="row">
+  <div class="label" title="chat heuristic">chat heuristic</div>
+  <div class="track">
+    <div class="bar" style="left:62.82%;width:4.12%;background:#39c5cf"
+         title="chat heuristic 0.10ms"></div>
+  </div>
+  <div class="dur">0.10ms</div>
+  <pre class="attrs">{
+  "gen_ai.conversation.id": "settlement-mismatch-page",
+  "gen_ai.input.messages": "[{\"role\": \"user\", \"parts\": [{\"type\": \"text\", \"content\": \"pay_1007 failed settlement. Inspect the ledger and page if the playbook says so.\"}]}, {\"role\": \"assistant\", \"parts\": [{\"type\": \"tool_call\", \"id\": \"call_e58b3ebab8\", \"name\": \"lookup_payment\"}]}, {\"role\": \"tool\", \"parts\": [{\"type\": \"text\", \"content\": \"{\\\"payment_id\\\": \\\"pay_1007\\\", \\\"merchant_id\\\": \\\"mch_nova\\\", \\\"customer_id\\\": \\\"cus_ops\\\", \\\"amount_cents\\\": 1250000, \\\"currency\\\": \\\"USD\\\", \\\"status\\\": \\\"failed\\\", \\\"method\\\": \\\"ach\\\", \\\"failure_code\\\": \\\"SETTLEMENT_MISMATCH\\\", \\\"fingerprint\\\": \\\"fp_cus_ops_1250000\\\", \\\"created_at\\\": \\\"2026-09-17T14:00:00Z\\\", \\\"refunded_cents\\\": 0, \\\"ach_return\\\": null, \\\"card_last4\\\": \\\"4242\\\"}\"}, {\"type\": \"tool_call_response\", \"id\": \"call_e58b3ebab8\", \"result\": \"{\\\"payment_id\\\": \\\"pay_1007\\\", \\\"merchant_id\\\": \\\"mch_nova\\\", \\\"customer_id\\\": \\\"cus_ops\\\", \\\"amount_cents\\\": 1250000, \\\"currency\\\": \\\"USD\\\", \\\"status\\\": \\\"failed</pre>
+</div>
+<div class="row">
+  <div class="label" title="apply_guardrail tool_policy">apply_guardrail tool_policy</div>
+  <div class="track">
+    <div class="bar" style="left:72.71%;width:0.80%;background:#e5534b"
+         title="apply_guardrail tool_policy 0.01ms"></div>
+  </div>
+  <div class="dur">0.01ms</div>
+  <pre class="attrs">{
+  "gen_ai.operation.name": "apply_guardrail",
+  "gen_ai.provider.name": "agent_trace_eval",
+  "gen_ai.tool.name": "page_oncall",
+  "guardrail.decision": "allow",
+  "guardrail.name": "tool_policy",
+  "guardrail.reason": "ok",
+  "guardrail.rule": "tool_ok"
+}</pre>
+</div>
+<div class="row">
+  <div class="label" title="execute_tool page_oncall">execute_tool page_oncall</div>
+  <div class="track">
+    <div class="bar" style="left:75.84%;width:1.70%;background:#d6a840"
+         title="execute_tool page_oncall 0.04ms"></div>
+  </div>
+  <div class="dur">0.04ms</div>
+  <pre class="attrs">{
+  "gen_ai.operation.name": "execute_tool",
+  "gen_ai.provider.name": "agent_trace_eval",
+  "gen_ai.tool.call.arguments": "{\"severity\": \"sev-1\", \"summary\": \"Settlement mismatch on pay_1007\", \"payment_id\": \"pay_1007\"}",
+  "gen_ai.tool.call.id": "call_823501accb",
+  "gen_ai.tool.call.result": "{\"ok\": true, \"incident_id\": \"inc_9002\", \"payment_id\": \"pay_1007\", \"severity\": \"sev-1\", \"summary\": \"Settlement mismatch on pay_1007\", \"status\": \"open\"}",
+  "gen_ai.tool.name": "page_oncall",
+  "gen_ai.tool.type": "function"
+}</pre>
+</div>
+<div class="row">
+  <div class="label" title="chat heuristic">chat heuristic</div>
+  <div class="track">
+    <div class="bar" style="left:80.48%;width:4.98%;background:#39c5cf"
+         title="chat heuristic 0.12ms"></div>
+  </div>
+  <div class="dur">0.12ms</div>
+  <pre class="attrs">{
+  "gen_ai.conversation.id": "settlement-mismatch-page",
+  "gen_ai.input.messages": "[{\"role\": \"user\", \"parts\": [{\"type\": \"text\", \"content\": \"pay_1007 failed settlement. Inspect the ledger and page if the playbook says so.\"}]}, {\"role\": \"assistant\", \"parts\": [{\"type\": \"tool_call\", \"id\": \"call_e58b3ebab8\", \"name\": \"lookup_payment\"}]}, {\"role\": \"tool\", \"parts\": [{\"type\": \"text\", \"content\": \"{\\\"payment_id\\\": \\\"pay_1007\\\", \\\"merchant_id\\\": \\\"mch_nova\\\", \\\"customer_id\\\": \\\"cus_ops\\\", \\\"amount_cents\\\": 1250000, \\\"currency\\\": \\\"USD\\\", \\\"status\\\": \\\"failed\\\", \\\"method\\\": \\\"ach\\\", \\\"failure_code\\\": \\\"SETTLEMENT_MISMATCH\\\", \\\"fingerprint\\\": \\\"fp_cus_ops_1250000\\\", \\\"created_at\\\": \\\"2026-09-17T14:00:00Z\\\", \\\"refunded_cents\\\": 0, \\\"ach_return\\\": null, \\\"card_last4\\\": \\\"4242\\\"}\"}, {\"type\": \"tool_call_response\", \"id\": \"call_e58b3ebab8\", \"result\": \"{\\\"payment_id\\\": \\\"pay_1007\\\", \\\"merchant_id\\\": \\\"mch_nova\\\", \\\"customer_id\\\": \\\"cus_ops\\\", \\\"amount_cents\\\": 1250000, \\\"currency\\\": \\\"USD\\\", \\\"status\\\": \\\"failed</pre>
+</div>
+<div class="row">
+  <div class="label" title="apply_guardrail output_policy">apply_guardrail output_policy</div>
+  <div class="track">
+    <div class="bar" style="left:89.73%;width:0.80%;background:#e5534b"
+         title="apply_guardrail output_policy 0.00ms"></div>
+  </div>
+  <div class="dur">0.00ms</div>
+  <pre class="attrs">{
+  "gen_ai.operation.name": "apply_guardrail",
+  "gen_ai.provider.name": "agent_trace_eval",
+  "guardrail.decision": "allow",
+  "guardrail.name": "output_policy",
+  "guardrail.reason": "ok",
+  "guardrail.rule": "output_ok"
+}</pre>
+</div>
+</body>
+</html>
