@@ -1,0 +1,134 @@
+{
+  "task_id": "refund-over-captured",
+  "tree": {
+    "attrs": {
+      "gen_ai.evaluation.score.label": "pass",
+      "gen_ai.operation.name": "invoke_workflow"
+    },
+    "children": [
+      {
+        "attrs": {
+          "gen_ai.operation.name": "invoke_agent"
+        },
+        "children": [
+          {
+            "attrs": {
+              "gen_ai.operation.name": "apply_guardrail",
+              "guardrail.decision": "allow",
+              "guardrail.name": "input_policy"
+            },
+            "children": [],
+            "name": "apply_guardrail input_policy",
+            "op": "apply_guardrail"
+          },
+          {
+            "attrs": {
+              "gen_ai.operation.name": "chat"
+            },
+            "children": [],
+            "name": "chat heuristic",
+            "op": "chat"
+          },
+          {
+            "attrs": {
+              "gen_ai.operation.name": "apply_guardrail",
+              "gen_ai.tool.name": "lookup_payment",
+              "guardrail.decision": "allow",
+              "guardrail.name": "tool_policy"
+            },
+            "children": [],
+            "name": "apply_guardrail tool_policy",
+            "op": "apply_guardrail"
+          },
+          {
+            "attrs": {
+              "gen_ai.operation.name": "execute_tool",
+              "gen_ai.tool.name": "lookup_payment"
+            },
+            "children": [],
+            "name": "execute_tool lookup_payment",
+            "op": "execute_tool"
+          },
+          {
+            "attrs": {
+              "gen_ai.operation.name": "chat"
+            },
+            "children": [],
+            "name": "chat heuristic",
+            "op": "chat"
+          },
+          {
+            "attrs": {
+              "gen_ai.operation.name": "apply_guardrail",
+              "gen_ai.tool.name": "retrieve_policy",
+              "guardrail.decision": "allow",
+              "guardrail.name": "tool_policy"
+            },
+            "children": [],
+            "name": "apply_guardrail tool_policy",
+            "op": "apply_guardrail"
+          },
+          {
+            "attrs": {
+              "gen_ai.operation.name": "execute_tool",
+              "gen_ai.tool.name": "retrieve_policy"
+            },
+            "children": [
+              {
+                "attrs": {
+                  "gen_ai.operation.name": "retrieval"
+                },
+                "children": [],
+                "name": "retrieval fastpay-playbooks",
+                "op": "retrieval"
+              }
+            ],
+            "name": "execute_tool retrieve_policy",
+            "op": "execute_tool"
+          },
+          {
+            "attrs": {
+              "gen_ai.operation.name": "chat"
+            },
+            "children": [],
+            "name": "chat heuristic",
+            "op": "chat"
+          },
+          {
+            "attrs": {
+              "gen_ai.operation.name": "apply_guardrail",
+              "gen_ai.tool.name": "issue_refund",
+              "guardrail.decision": "block",
+              "guardrail.name": "tool_policy"
+            },
+            "children": [],
+            "name": "apply_guardrail tool_policy",
+            "op": "apply_guardrail"
+          },
+          {
+            "attrs": {
+              "gen_ai.operation.name": "chat"
+            },
+            "children": [],
+            "name": "chat heuristic",
+            "op": "chat"
+          },
+          {
+            "attrs": {
+              "gen_ai.operation.name": "apply_guardrail",
+              "guardrail.decision": "allow",
+              "guardrail.name": "output_policy"
+            },
+            "children": [],
+            "name": "apply_guardrail output_policy",
+            "op": "apply_guardrail"
+          }
+        ],
+        "name": "invoke_agent fastpay-exception-triage",
+        "op": "invoke_agent"
+      }
+    ],
+    "name": "eval.task refund-over-captured",
+    "op": "invoke_workflow"
+  }
+}
