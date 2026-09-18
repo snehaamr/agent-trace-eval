@@ -4,6 +4,10 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   eval:
     runs-on: ubuntu-latest
@@ -18,8 +22,24 @@ jobs:
         env:
           AGENT_LLM: heuristic
         run: pytest
-      - name: Write score table
+      - name: Eval suite
         if: always()
         env:
           AGENT_LLM: heuristic
-        run: python -m agent_trace_eval --format markdown >> "$GITHUB_STEP_SUMMARY"
+        run: python -m agent_trace_eval --format markdown --span-diff
+      - name: Scorecard
+        if: always()
+        env:
+          AGENT_LLM: heuristic
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python -m agent_trace_eval.scorecard --comment
+      - name: Upload traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-traces
+          path: |
+            artifacts/traces.jsonl
+            artifacts/scorecard.md
+            eval/last_report.json
+          if-no-files-found: ignore
