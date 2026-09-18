@@ -151,6 +151,10 @@ python -m agent_trace_eval
 # fail the process on quality/cost regression
 python -m agent_trace_eval --gate
 
+# rewrite eval/goldens/*.json after an intentional trace-shape change
+python -m agent_trace_eval --update-goldens
+python -m agent_trace_eval --span-diff
+
 pytest                         # unit tests + suite gate
 ```
 
@@ -176,6 +180,8 @@ Absolute floors (see `eval/thresholds.yaml`):
 - tool recall ≥ 90%
 - groundedness ≥ 90%
 - ≤ $0.01 / task (gpt-4o-mini prices)
+
+Checked-in **span goldens** (`eval/goldens/<task>.json`) snapshot each task’s GenAI span tree (operations, tool names, guardrail decisions — not timestamps or token counts). Dropping `retrieval`, skipping `apply_guardrail`, or adding an `issue_refund` span fails `pytest` / `--span-diff`. Refresh with `--update-goldens`.
 
 ## Span conventions
 
