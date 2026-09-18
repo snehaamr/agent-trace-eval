@@ -4,6 +4,11 @@ A small eval harness for a tool-using **payments exception** agent. It writes [O
 
 Most agent demos stop at “it works in a notebook.” This repo is the missing piece: **every turn is a span, every run has a score, pickup is a worker.**
 
+```bash
+python -m agent_trace_eval.worker enqueue   # request path: write outbox row, return
+python -m agent_trace_eval.worker once      # worker: pick up, run suite, store scores
+```
+
 ```
 invoke_agent fastpay-exception-triage
 ├─ apply_guardrail input_policy

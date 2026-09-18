@@ -22,11 +22,13 @@ jobs:
         env:
           AGENT_LLM: heuristic
         run: pytest
-      - name: Eval suite
+      - name: Enqueue + worker
         if: always()
         env:
           AGENT_LLM: heuristic
-        run: python -m agent_trace_eval --format markdown --span-diff
+        run: |
+          python -m agent_trace_eval.worker enqueue --span-diff
+          python -m agent_trace_eval.worker once
       - name: Scorecard
         if: always()
         env:
