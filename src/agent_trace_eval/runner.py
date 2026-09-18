@@ -15,7 +15,7 @@ from opentelemetry.trace import SpanKind
 from .agent import run_agent
 from .gate import check_gate, load_baseline, load_thresholds
 from .llm import build_llm
-from .metrics import TaskScore, score_task
+from .metrics import TaskScore, guardrail_stats, score_task
 from .span_diff import diff_shapes, flatten_ops, load_goldens, shapes_from_spans, write_goldens
 from .tasks import load_tasks
 from .telemetry import genai_span, set_json_attr, setup_tracer
@@ -43,7 +43,7 @@ def percentile(values: list[float], p: float) -> float:
 def summarize(scores: list[TaskScore]) -> dict[str, Any]:
     n = len(scores) or 1
     latencies = [s.latency_ms for s in scores]
-    return {
+    summary = {
         "n_tasks": len(scores),
         "n_pass": sum(1 for s in scores if s.success),
         "success_rate": sum(1 for s in scores if s.success) / n,
@@ -58,6 +58,8 @@ def summarize(scores: list[TaskScore]) -> dict[str, Any]:
         "mean_input_tokens": sum(s.input_tokens for s in scores) / n,
         "mean_output_tokens": sum(s.output_tokens for s in scores) / n,
     }
+    summary.update(guardrail_stats(scores))
+    return summary
 
 
 def markdown_table(scores: list[TaskScore], summary: dict[str, Any]) -> str:
@@ -90,11 +92,12 @@ def run_suite(
     enforce_gate: bool = False,
     update_goldens: bool = False,
     enforce_span_diff: bool = False,
+    slice: str | None = None,
 ) -> dict[str, Any]:
     sink: list[dict[str, Any]] = []
     setup_tracer(jsonl_path=str(jsonl_path or DEFAULT_JSONL), sink=sink)
     llm = build_llm()
-    tasks = load_tasks()
+    tasks = load_tasks(slice=slice)
     scores: list[TaskScore] = []
     with genai_span(
         "invoke_workflow eval-suite",
@@ -184,6 +187,7 @@ def main(argv: list[str] | None = None) -> int:
         help="rewrite eval/baseline.json from this run (summary + per-task rows)",
     )
     parser.add_argument("--jsonl", type=Path, default=DEFAULT_JSONL)
+    parser.add_argument("--slice", choices=["triage", "guardrail"], default=None)
     parser.add_argument(
         "--format",
         choices=["markdown", "json"],
@@ -196,6 +200,7 @@ def main(argv: list[str] | None = None) -> int:
             enforce_gate=args.gate,
             update_goldens=args.update_goldens,
             enforce_span_diff=args.span_diff,
+            slice=args.slice,
         )
     except AssertionError as exc:
         print(exc, file=sys.stderr)

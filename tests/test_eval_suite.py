@@ -38,6 +38,9 @@ def test_eval_suite_meets_ci_gate():
     )
     assert summary["n_tasks"] >= 20
     assert summary["schema_validity"] == 1.0
+    assert summary["guardrail_recall"] == 1.0
+    assert summary["guardrail_precision"] == 1.0
+    assert summary["guardrail_n_positive"] >= 6
 
 
 def test_span_shapes_match_goldens():

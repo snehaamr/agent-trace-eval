@@ -48,6 +48,9 @@ class TaskScore:
     actual_decision: str = ""
     called_tools: list[str] = field(default_factory=list)
     trace_id: str = ""
+    guardrail_blocked: bool = False
+    expected_block: bool = False
+    slice: str = "triage"
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -69,6 +72,9 @@ class TaskScore:
             "actual_decision": self.actual_decision,
             "called_tools": self.called_tools,
             "trace_id": self.trace_id,
+            "guardrail_blocked": self.guardrail_blocked,
+            "expected_block": self.expected_block,
+            "slice": self.slice,
         }
 
 
@@ -157,7 +163,40 @@ def score_task(task: dict[str, Any], result: AgentResult) -> TaskScore:
         actual_decision=str(actual.get("decision") or ""),
         called_tools=called,
         trace_id=result.trace_id,
+        guardrail_blocked=result.guardrail_blocked,
+        expected_block=want_block,
+        slice=task_slice(task),
     )
+
+
+def task_slice(task: dict[str, Any]) -> str:
+    if task.get("slice"):
+        return str(task["slice"])
+    if "guardrail_should_block" in (task.get("expected") or {}):
+        return "guardrail"
+    return "triage"
+
+
+def guardrail_stats(scores: list[TaskScore]) -> dict[str, float]:
+    """Precision/recall of hard blocks. Triage success cannot hide a missed PAN."""
+    labeled = [s for s in scores if s.slice == "guardrail" or s.expected_block or s.guardrail_blocked]
+    # Evaluate the guardrail slice plus any unexpected blocks on triage tasks (false positives).
+    rows = scores
+    tp = sum(1 for s in rows if s.expected_block and s.guardrail_blocked)
+    fp = sum(1 for s in rows if (not s.expected_block) and s.guardrail_blocked)
+    fn = sum(1 for s in rows if s.expected_block and not s.guardrail_blocked)
+    precision = tp / (tp + fp) if (tp + fp) else 1.0
+    recall = tp / (tp + fn) if (tp + fn) else 1.0
+    n_pos = sum(1 for s in rows if s.expected_block)
+    return {
+        "guardrail_tp": float(tp),
+        "guardrail_fp": float(fp),
+        "guardrail_fn": float(fn),
+        "guardrail_precision": precision,
+        "guardrail_recall": recall,
+        "guardrail_n_positive": float(n_pos),
+        "n_labeled": float(len(labeled)),
+    }
 
 
 def _succeeded(result: AgentResult, name: str) -> bool:

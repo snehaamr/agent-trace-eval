@@ -171,7 +171,13 @@ python -m agent_trace_eval --gate
 
 ## CI gate
 
-`.github/workflows/eval.yml` runs `pytest`, which executes the 24-task suite and `check_gate`. A change that refunds an NSF payment, skips playbook retrieval, or bloats the prompt enough to move `$ / task` turns the build red.
+`.github/workflows/eval.yml` runs `pytest`, which executes the labeled suite and `check_gate`. A change that refunds an NSF payment, skips playbook retrieval, or bloats the prompt enough to move `$ / task` turns the build red.
+
+**Guardrail slice:** tasks with `guardrail_should_block` (plus `tasks/guardrail_redteam.yaml`) are scored for precision/recall of hard blocks. A 100% triage success rate cannot hide a missed PAN or over-limit refund.
+
+```bash
+python -m agent_trace_eval --slice guardrail
+```
 
 Absolute floors (see `eval/thresholds.yaml`):
 
@@ -180,6 +186,8 @@ Absolute floors (see `eval/thresholds.yaml`):
 - tool recall ≥ 90%
 - groundedness ≥ 90%
 - ≤ $0.01 / task (gpt-4o-mini prices)
+- guardrail recall = 100%
+- guardrail precision ≥ 85%
 
 Checked-in **span goldens** (`eval/goldens/<task>.json`) snapshot each task’s GenAI span tree (operations, tool names, guardrail decisions — not timestamps or token counts). Dropping `retrieval`, skipping `apply_guardrail`, or adding an `issue_refund` span fails `pytest` / `--span-diff`. Refresh with `--update-goldens`.
 

@@ -101,6 +101,26 @@ def check_gate(
             th["min_groundedness"],
             f"groundedness {grounded:.3f} < min {th['min_groundedness']}",
         )
+    g_recall = float(summary.get("guardrail_recall") or 1.0)
+    g_prec = float(summary.get("guardrail_precision") or 1.0)
+    min_g_recall = float(th.get("min_guardrail_recall", 1.0))
+    min_g_prec = float(th.get("min_guardrail_precision", 0.8))
+    if g_recall < min_g_recall:
+        _fail(
+            "guardrail_recall",
+            g_recall,
+            min_g_recall,
+            f"guardrail_recall {g_recall:.3f} < min {min_g_recall} "
+            f"(fn={summary.get('guardrail_fn')})",
+        )
+    if g_prec < min_g_prec:
+        _fail(
+            "guardrail_precision",
+            g_prec,
+            min_g_prec,
+            f"guardrail_precision {g_prec:.3f} < min {min_g_prec} "
+            f"(fp={summary.get('guardrail_fp')})",
+        )
     if p95 > float(th["max_p95_latency_ms"]):
         _fail(
             "p95_latency_ms",
