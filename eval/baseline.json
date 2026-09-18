@@ -1,0 +1,12 @@
+{
+  "n_tasks": 24,
+  "n_pass": 24,
+  "success_rate": 1.0,
+  "usd_per_task": 0.000267825,
+  "total_usd": 0.0064278,
+  "schema_validity": 1.0,
+  "tool_recall": 1.0,
+  "groundedness": 1.0,
+  "mean_input_tokens": 1234.0,
+  "mean_output_tokens": 137.875
+}

@@ -1,0 +1,35 @@
+[project]
+name = "agent-trace-eval"
+version = "0.1.0"
+description = "Eval harness + OpenTelemetry GenAI CI gate for a tool-using payments exception agent."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "opentelemetry-api>=1.27.0",
+  "opentelemetry-sdk>=1.27.0",
+  "opentelemetry-exporter-otlp-proto-http>=1.27.0",
+  "pyyaml>=6.0",
+  "jsonschema>=4.23.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+agent-eval = "agent_trace_eval.runner:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
