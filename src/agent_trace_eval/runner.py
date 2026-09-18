@@ -178,6 +178,11 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="fail if GenAI span shapes drifted from eval/goldens",
     )
+    parser.add_argument(
+        "--write-baseline",
+        action="store_true",
+        help="rewrite eval/baseline.json from this run (summary + per-task rows)",
+    )
     parser.add_argument("--jsonl", type=Path, default=DEFAULT_JSONL)
     parser.add_argument(
         "--format",
@@ -195,6 +200,10 @@ def main(argv: list[str] | None = None) -> int:
     except AssertionError as exc:
         print(exc, file=sys.stderr)
         return 1
+    if args.write_baseline:
+        from .scorecard import write_baseline
+
+        write_baseline(report)
     if args.format == "json":
         print(json.dumps({k: v for k, v in report.items() if k != "markdown"}, indent=2))
     else:

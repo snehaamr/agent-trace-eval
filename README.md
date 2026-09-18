@@ -183,6 +183,8 @@ Absolute floors (see `eval/thresholds.yaml`):
 
 Checked-in **span goldens** (`eval/goldens/<task>.json`) snapshot each task’s GenAI span tree (operations, tool names, guardrail decisions — not timestamps or token counts). Dropping `retrieval`, skipping `apply_guardrail`, or adding an `issue_refund` span fails `pytest` / `--span-diff`. Refresh with `--update-goldens`.
 
+On pull requests, CI upserts a **per-task scorecard** comment (was vs now, Δ `$`, flipped tasks) from `python -m agent_trace_eval.scorecard --comment`. Trace JSONL is uploaded as an Actions artifact.
+
 ## Span conventions
 
 | Span name | `gen_ai.operation.name` | Kind |

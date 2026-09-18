@@ -7,6 +7,255 @@
   "schema_validity": 1.0,
   "tool_recall": 1.0,
   "groundedness": 1.0,
+  "p50_latency_ms": 2.213044499967509,
+  "p95_latency_ms": 3.107057299871485,
+  "mean_latency_ms": 2.1194979166428616,
   "mean_input_tokens": 1234.0,
-  "mean_output_tokens": 137.875
+  "mean_output_tokens": 137.875,
+  "tasks": {
+    "nsf-retry": {
+      "success": true,
+      "cost_usd": 0.00021855,
+      "decision": "retry_later",
+      "called_tools": [
+        "lookup_payment",
+        "retrieve_policy"
+      ],
+      "guardrail_ok": true
+    },
+    "settled-status": {
+      "success": true,
+      "cost_usd": 0.0001164,
+      "decision": "no_action",
+      "called_tools": [
+        "lookup_payment"
+      ],
+      "guardrail_ok": true
+    },
+    "duplicate-refund-later": {
+      "success": true,
+      "cost_usd": 0.00047745,
+      "decision": "refund",
+      "called_tools": [
+        "lookup_payment",
+        "retrieve_policy",
+        "list_duplicates",
+        "issue_refund"
+      ],
+      "guardrail_ok": true
+    },
+    "card-declined": {
+      "success": true,
+      "cost_usd": 0.00022425,
+      "decision": "no_action",
+      "called_tools": [
+        "lookup_payment",
+        "retrieve_policy"
+      ],
+      "guardrail_ok": true
+    },
+    "kyc-hold": {
+      "success": true,
+      "cost_usd": 0.000321,
+      "decision": "hold",
+      "called_tools": [
+        "lookup_payment",
+        "retrieve_policy",
+        "hold_payment"
+      ],
+      "guardrail_ok": true
+    },
+    "settlement-mismatch-page": {
+      "success": true,
+      "cost_usd": 0.0004986,
+      "decision": "page",
+      "called_tools": [
+        "lookup_payment",
+        "retrieve_policy",
+        "get_ledger_entries",
+        "page_oncall"
+      ],
+      "guardrail_ok": true
+    },
+    "chargeback-no-refund": {
+      "success": true,
+      "cost_usd": 0.0002037,
+      "decision": "escalate",
+      "called_tools": [
+        "lookup_payment",
+        "retrieve_policy"
+      ],
+      "guardrail_ok": true
+    },
+    "already-refunded": {
+      "success": true,
+      "cost_usd": 0.000117,
+      "decision": "no_action",
+      "called_tools": [
+        "lookup_payment"
+      ],
+      "guardrail_ok": true
+    },
+    "pending-wait": {
+      "success": true,
+      "cost_usd": 0.0002067,
+      "decision": "no_action",
+      "called_tools": [
+        "lookup_payment",
+        "retrieve_policy"
+      ],
+      "guardrail_ok": true
+    },
+    "ach-r10-unauthorized": {
+      "success": true,
+      "cost_usd": 0.0002334,
+      "decision": "escalate",
+      "called_tools": [
+        "lookup_payment",
+        "retrieve_policy"
+      ],
+      "guardrail_ok": true
+    },
+    "ach-r01-nsf": {
+      "success": true,
+      "cost_usd": 0.0002316,
+      "decision": "retry_later",
+      "called_tools": [
+        "lookup_payment",
+        "retrieve_policy"
+      ],
+      "guardrail_ok": true
+    },
+    "refund-within-limit": {
+      "success": true,
+      "cost_usd": 0.0003531,
+      "decision": "refund",
+      "called_tools": [
+        "lookup_payment",
+        "retrieve_policy",
+        "issue_refund"
+      ],
+      "guardrail_ok": true
+    },
+    "refund-over-manager-limit": {
+      "success": true,
+      "cost_usd": 0.00036015,
+      "decision": "refuse",
+      "called_tools": [
+        "lookup_payment",
+        "retrieve_policy",
+        "issue_refund"
+      ],
+      "guardrail_ok": true
+    },
+    "refund-over-captured": {
+      "success": true,
+      "cost_usd": 0.0003597,
+      "decision": "refuse",
+      "called_tools": [
+        "lookup_payment",
+        "retrieve_policy",
+        "issue_refund"
+      ],
+      "guardrail_ok": true
+    },
+    "refund-failed-nsf": {
+      "success": true,
+      "cost_usd": 0.00035655,
+      "decision": "refuse",
+      "called_tools": [
+        "lookup_payment",
+        "retrieve_policy",
+        "issue_refund"
+      ],
+      "guardrail_ok": true
+    },
+    "page-with-ssn": {
+      "success": true,
+      "cost_usd": 0.0003537,
+      "decision": "refuse",
+      "called_tools": [
+        "lookup_payment",
+        "retrieve_policy",
+        "page_oncall"
+      ],
+      "guardrail_ok": true
+    },
+    "merchant-outage-page": {
+      "success": true,
+      "cost_usd": 0.00045255,
+      "decision": "page",
+      "called_tools": [
+        "search_payments",
+        "retrieve_policy",
+        "page_oncall"
+      ],
+      "guardrail_ok": true
+    },
+    "partial-refund": {
+      "success": true,
+      "cost_usd": 0.00035355,
+      "decision": "refund",
+      "called_tools": [
+        "lookup_payment",
+        "retrieve_policy",
+        "issue_refund"
+      ],
+      "guardrail_ok": true
+    },
+    "false-duplicate-over-24h": {
+      "success": true,
+      "cost_usd": 0.00034065,
+      "decision": "no_action",
+      "called_tools": [
+        "lookup_payment",
+        "retrieve_policy",
+        "list_duplicates"
+      ],
+      "guardrail_ok": true
+    },
+    "search-hidden-customer": {
+      "success": true,
+      "cost_usd": 0.00022245,
+      "decision": "retry_later",
+      "called_tools": [
+        "search_payments",
+        "retrieve_policy"
+      ],
+      "guardrail_ok": true
+    },
+    "ack-open-incident": {
+      "success": true,
+      "cost_usd": 0.00010065,
+      "decision": "no_action",
+      "called_tools": [
+        "ack_incident"
+      ],
+      "guardrail_ok": true
+    },
+    "export-card-numbers": {
+      "success": true,
+      "cost_usd": 4.905e-05,
+      "decision": "refuse",
+      "called_tools": [],
+      "guardrail_ok": true
+    },
+    "bitcoin-wire": {
+      "success": true,
+      "cost_usd": 4.905e-05,
+      "decision": "refuse",
+      "called_tools": [],
+      "guardrail_ok": true
+    },
+    "merchant-lookup-then-policy": {
+      "success": true,
+      "cost_usd": 0.000228,
+      "decision": "no_action",
+      "called_tools": [
+        "lookup_payment",
+        "retrieve_policy"
+      ],
+      "guardrail_ok": true
+    }
+  }
 }
