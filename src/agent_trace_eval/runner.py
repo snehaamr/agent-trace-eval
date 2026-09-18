@@ -16,6 +16,7 @@ from .agent import run_agent
 from .gate import check_gate, load_baseline, load_thresholds
 from .llm import build_llm
 from .metrics import TaskScore, score_task
+from .span_diff import diff_shapes, flatten_ops, load_goldens, shapes_from_spans, write_goldens
 from .tasks import load_tasks
 from .telemetry import genai_span, set_json_attr, setup_tracer
 from .world import World
@@ -87,6 +88,8 @@ def run_suite(
     *,
     jsonl_path: Path | None = None,
     enforce_gate: bool = False,
+    update_goldens: bool = False,
+    enforce_span_diff: bool = False,
 ) -> dict[str, Any]:
     sink: list[dict[str, Any]] = []
     setup_tracer(jsonl_path=str(jsonl_path or DEFAULT_JSONL), sink=sink)
@@ -136,11 +139,15 @@ def run_suite(
                 otel_context.detach(token)
 
     summary = summarize(scores)
+    shapes = shapes_from_spans(sink)
+    if update_goldens:
+        write_goldens(shapes)
     report = {
         "summary": summary,
         "scores": [s.as_dict() for s in scores],
         "markdown": markdown_table(scores, summary),
         "n_spans": len(sink),
+        "span_shapes": {k: flatten_ops(v["tree"]) for k, v in shapes.items()},
     }
     DEFAULT_REPORT.parent.mkdir(parents=True, exist_ok=True)
     DEFAULT_REPORT.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
@@ -150,12 +157,32 @@ def run_suite(
         report["gate_passed"] = gate.passed
         report["gate_failures"] = [f.message for f in gate.failures]
         gate.raise_for_ci()
+    if enforce_span_diff:
+        problems = diff_shapes(shapes, load_goldens())
+        if problems:
+            raise AssertionError("span goldens FAILED:\n  - " + "\n  - ".join(problems))
+        report["span_diff_passed"] = True
     return report
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run FastPay agent eval + optional CI gate")
     parser.add_argument("--gate", action="store_true", help="fail the process if thresholds regress")
+    parser.add_argument(
+        "--update-goldens",
+        action="store_true",
+        help="rewrite eval/goldens/*.json from this run's span trees",
+    )
+    parser.add_argument(
+        "--span-diff",
+        action="store_true",
+        help="fail if GenAI span shapes drifted from eval/goldens",
+    )
+    parser.add_argument(
+        "--write-baseline",
+        action="store_true",
+        help="rewrite eval/baseline.json from this run (summary + per-task rows)",
+    )
     parser.add_argument("--jsonl", type=Path, default=DEFAULT_JSONL)
     parser.add_argument(
         "--format",
@@ -164,10 +191,19 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
     try:
-        report = run_suite(jsonl_path=args.jsonl, enforce_gate=args.gate)
+        report = run_suite(
+            jsonl_path=args.jsonl,
+            enforce_gate=args.gate,
+            update_goldens=args.update_goldens,
+            enforce_span_diff=args.span_diff,
+        )
     except AssertionError as exc:
         print(exc, file=sys.stderr)
         return 1
+    if args.write_baseline:
+        from .scorecard import write_baseline
+
+        write_baseline(report)
     if args.format == "json":
         print(json.dumps({k: v for k, v in report.items() if k != "markdown"}, indent=2))
     else:

@@ -38,3 +38,11 @@ def test_eval_suite_meets_ci_gate():
     )
     assert summary["n_tasks"] >= 20
     assert summary["schema_validity"] == 1.0
+
+
+def test_span_shapes_match_goldens():
+    report = run_suite(enforce_span_diff=True, enforce_gate=False)
+    assert report.get("span_diff_passed") is True
+    from agent_trace_eval.span_diff import load_goldens
+
+    assert len(load_goldens()) >= 20
