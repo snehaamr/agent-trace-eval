@@ -16,6 +16,7 @@ from .agent import run_agent
 from .gate import check_gate, load_baseline, load_thresholds
 from .llm import build_llm
 from .metrics import TaskScore, guardrail_stats, score_task
+from .metrics_export import write_prometheus
 from .span_diff import diff_shapes, flatten_ops, load_goldens, shapes_from_spans, write_goldens
 from .tasks import load_tasks
 from .telemetry import genai_span, set_json_attr, setup_tracer
@@ -152,6 +153,7 @@ def run_suite(
         "n_spans": len(sink),
         "span_shapes": {k: flatten_ops(v["tree"]) for k, v in shapes.items()},
     }
+    write_prometheus(summary, report["scores"])
     DEFAULT_REPORT.parent.mkdir(parents=True, exist_ok=True)
     DEFAULT_REPORT.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
 

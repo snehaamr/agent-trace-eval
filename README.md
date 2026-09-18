@@ -83,6 +83,10 @@ OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318 python -m agent_trace_eval
 # UI: http://localhost:16686  service.name = agent-trace-eval
 ```
 
+Each suite run also writes Prometheus gauges to `artifacts/metrics.prom` (`eval_success_rate`, `eval_usd_per_task`, `eval_guardrail_recall`, `gen_ai_client_token_usage`). `docker compose up` starts Prometheus + Grafana; the provisioned dashboard is `grafana/dashboards/agent-eval.json` at http://localhost:3000.
+
+![Grafana-style eval board](docs/grafana_eval_board.png)
+
 ## Metrics (no LLM judge)
 
 | Metric | What it measures |
